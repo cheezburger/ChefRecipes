@@ -1,5 +1,7 @@
-execute "Disable CSF" do
-  command "csf -x"
+if (FileTest.directory?("/etc/csf"))
+  execute "Disable CSF" do
+    command "csf -x"
+  end
 end
 
 case node['platform']
