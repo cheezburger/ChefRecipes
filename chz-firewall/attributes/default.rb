@@ -1,5 +1,5 @@
-default['chz-firewall']['version']		= "5"
-default['chz-firewall']['whitelist']		= [ ]
+default['chz-firewall']['version']		= "6"
+default['chz-firewall']['whitelist']		= [ "98.220.135.117", "216.176.189.77", "67.247.95.201", "92.238.254.191", "168.61.3.124", "216.176.189.71", "184.173.141.164"  ]
 default['chz-firewall']['blacklist']  		= [ ]
 default['chz-firewall']['whitelist_interfaces']	= [ "lo" ]
 default['chz-firewall']['enable_ping']		= true

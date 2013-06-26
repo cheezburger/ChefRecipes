@@ -3,6 +3,10 @@ execute "windows-nuke-rules" do
   creates "c:/chz-fw-#{node['chz-firewall']['version']}.txt"
 end
 
+execute "turn on firewall" do
+  command "netsh advfirewall set allprofiles state on"
+end
+
 #Translate attributes to windows firewall states
 if node['chz-firewall']['default_deny_in']
   policy_in = "blockinbound"
