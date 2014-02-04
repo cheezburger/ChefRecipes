@@ -1,3 +1,6 @@
+whitelist = search(:'chz-firewall', "type:whitelist") rescue []
+blacklist = search(:'chz-firewall', "type:blacklist") rescue []
+
 execute "windows-nuke-rules" do
   command "netsh advfirewall firewall delete rule name=all > c:/chz-fw-#{node['chz-firewall']['version']}.txt"
   creates "c:/chz-fw-#{node['chz-firewall']['version']}.txt"
@@ -23,6 +26,7 @@ execute "default block inbound" do
   command "netsh advfirewall set allprofiles firewallpolicy #{policy_in},#{policy_out}"
 end
 
+#Attribute based whitelist
 node['chz-firewall']['whitelist'].each do |host|
   powershell "windows-whitelist-#{host}" do
     code <<-EOH
@@ -40,6 +44,26 @@ node['chz-firewall']['whitelist'].each do |host|
   end
 end
 
+#Databag based whitelist
+whitelist.each do |host|
+  powershell "windows-whitelist-#{host['id']}" do
+    code <<-EOH
+      $hostip = "#{host['ip']}"
+      $hostid = "#{host['id']}"
+      $name = "IP $hostid whitelist"
+      $x = netsh advfirewall firewall show rule name="$name"
+      if ($LastExitCode -ne 0) {
+         Write-Host "Opening $name"
+         netsh advfirewall firewall add rule name="$name" dir=in action=allow protocol=any remoteip="$hostip"
+      }
+      else {
+         Write-Host "$name is already added"
+      }
+    EOH
+  end
+end
+
+#Attribute based blacklist
 node['chz-firewall']['blacklist'].each do |host|
   powershell "windows-blacklist-#{host}" do
     code <<-EOH
@@ -48,6 +72,25 @@ node['chz-firewall']['blacklist'].each do |host|
       $x = netsh advfirewall firewall show rule name="$name"
       if ($LastExitCode -ne 0) {
          Write-Host "Closing $name"
+         netsh advfirewall firewall add rule name="$name" dir=in action=block protocol=any remoteip="$hostip"
+      }
+      else {
+         Write-Host "$name is already added"
+      }
+    EOH
+  end
+end
+
+#Databag based blacklist
+blacklist.each do |host|
+  powershell "windows-blacklist-#{host['id']}" do
+    code <<-EOH
+      $hostip = "#{host['ip']}"
+      $hostid = "#{host['id']}"
+      $name = "IP $hostid blacklist"
+      $x = netsh advfirewall firewall show rule name="$name"
+      if ($LastExitCode -ne 0) {
+         Write-Host "Opening $name"
          netsh advfirewall firewall add rule name="$name" dir=in action=block protocol=any remoteip="$hostip"
       }
       else {

@@ -32,7 +32,18 @@ Attributes
 Usage
 =====
 Use default recipe for default rules with iptables or windows firewall.
-Use attribute overrides to change settings
+Use attribute overrides to change settings.
+Create databag 'chz-firewall' to optionally store whitelist and blacklist ip addresses with metadata. Example below:
+
+   {
+       "id": "office_ip_1",
+       "type": "whitelist",
+       "ip": "1.2.3.4",
+       "desc": "Generic ISP office IP"
+   }
+
+Use type blacklist to create a blacklist item.
+
 
 Notes
 =====

@@ -1,3 +1,15 @@
+whitelist_dbag = search(:'chz-firewall', "type:whitelist") rescue []
+blacklist_dbag = search(:'chz-firewall', "type:blacklist") rescue []
+
+whitelist = []
+blacklist = []
+
+whitelist = whitelist_dbag.map { |a| a['ip'] }
+blacklist = blacklist_dbag.map { |a| a['ip'] }
+
+whitelist = whitelist.concat(node['chz-firewall']['whitelist'])
+blacklist = blacklist.concat(node['chz-firewall']['blacklist'])
+
 if (FileTest.directory?("/etc/csf"))
   execute "Disable CSF" do
     command "csf -x"
@@ -17,17 +29,20 @@ when  "ubuntu", "debian"
   end
 end
 
-execute "iptables-restore" do
-  command "iptables-restore < #{node['chz-firewall']['iptables']['savefile']}"
-  action :nothing
-end
-
 template "#{node['chz-firewall']['iptables']['savefile']}" do
   source "iptables.save.erb"
   mode 0444
   owner "root"
   group "root"
+  variables({
+    :whitelist => whitelist,
+    :blacklist => blacklist
+  })
   notifies :run, "execute[iptables-restore]", :immediate
+end
+
+execute "iptables-restore" do
+  command "iptables-restore < #{node['chz-firewall']['iptables']['savefile']}"
 end
 
 case node['platform']
