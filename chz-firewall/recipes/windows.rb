@@ -28,7 +28,7 @@ end
 
 #Attribute based whitelist
 node['chz-firewall']['whitelist'].each do |host|
-  powershell "windows-whitelist-#{host}" do
+  powershell_script "windows-whitelist-#{host}" do
     code <<-EOH
       $hostip = "#{host}"
       $name = "IP $hostip whitelist"
@@ -46,7 +46,7 @@ end
 
 #Databag based whitelist
 whitelist.each do |host|
-  powershell "windows-whitelist-#{host['id']}" do
+  powershell_script "windows-whitelist-#{host['id']}" do
     code <<-EOH
       $hostip = "#{host['ip']}"
       $hostid = "#{host['id']}"
@@ -65,7 +65,7 @@ end
 
 #Attribute based blacklist
 node['chz-firewall']['blacklist'].each do |host|
-  powershell "windows-blacklist-#{host}" do
+  powershell_script "windows-blacklist-#{host}" do
     code <<-EOH
       $hostip = "#{host}"
       $name = "IP $hostip blacklist"
@@ -83,7 +83,7 @@ end
 
 #Databag based blacklist
 blacklist.each do |host|
-  powershell "windows-blacklist-#{host['id']}" do
+  powershell_script "windows-blacklist-#{host['id']}" do
     code <<-EOH
       $hostip = "#{host['ip']}"
       $hostid = "#{host['id']}"
@@ -102,7 +102,7 @@ end
 
 if node['chz-firewall']['tcp_in'].any?
   node['chz-firewall']['tcp_in'].each do |port|
-    powershell "open-tcp-in" do
+    powershell_script "open-tcp-in" do
       code <<-EOH
         $tcpPort = "#{port}"
         $name = "Port $tcpPort inbound"
@@ -120,7 +120,7 @@ end
 
 if node['chz-firewall']['tcp_out'].any?
   node['chz-firewall']['tcp_out'].each do |port|
-    powershell "open-tcp-out" do
+    powershell_script "open-tcp-out" do
       code <<-EOH
         $tcpPort = "#{port}"
         $name = "Port $tcpPort outbound"
@@ -138,7 +138,7 @@ end
 
 if node['chz-firewall']['udp_in'].any?
   node['chz-firewall']['udp_in'].each do |port|
-    powershell "open-udp-in" do
+    powershell_script "open-udp-in" do
       code <<-EOH
         $udpPort = "#{port}"
         $name = "Port $udpPort inbound"
@@ -156,7 +156,7 @@ end
 
 if node['chz-firewall']['udp_out'].any?
   node['chz-firewall']['udp_out'].each do |port|
-    powershell "open-udp-out" do
+    powershell_script "open-udp-out" do
       code <<-EOH
         $udpPort = "#{port}"
         $name = "Port $udpPort outbound"
@@ -173,7 +173,7 @@ if node['chz-firewall']['udp_out'].any?
 end
 
 if ( node['chz-firewall']['enable_ping'] )
-  powershell "enable ping" do
+  powershell_script "enable ping" do
     code <<-EOH
       $name = "ICMPv4 Inbound"
       $x = netsh advfirewall firewall show rule name="$name"
