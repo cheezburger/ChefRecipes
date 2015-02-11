@@ -16,7 +16,7 @@
 -A INPUT -p tcp -m tcp --dport <%= port %> -j ACCEPT
   <% end -%>
   <% @node['chz-firewall']['udp_in'].each do |port| -%>
--A INPUT -p tcp -m udp --dport <%= port %> -j ACCEPT
+-A INPUT -p udp -m udp --dport <%= port %> -j ACCEPT
   <% end -%>
 <% end -%>
 <% if (node['chz-firewall']['default_deny_out']) -%>
