@@ -1,3 +1,4 @@
+name             "chz-firewall"
 maintainer       "Cheezburger Inc"
 maintainer_email "joey@cheezburger.com"
 license          "New BSD License"
