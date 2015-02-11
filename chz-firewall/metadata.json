@@ -6,25 +6,34 @@
   "maintainer_email": "joey@cheezburger.com",
   "license": "New BSD License",
   "platforms": {
+
   },
   "dependencies": {
-    "powershell": ">= 0.0.0"
+
   },
   "recommendations": {
+
   },
   "suggestions": {
+
   },
   "conflicting": {
+
   },
   "providing": {
+
   },
   "replacing": {
+
   },
   "attributes": {
+
   },
   "groupings": {
+
   },
   "recipes": {
+
   },
-  "version": "0.2.1"
+  "version": "0.2.2"
 }
