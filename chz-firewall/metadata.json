@@ -6,7 +6,8 @@
   "maintainer_email": "joey@cheezburger.com",
   "license": "New BSD License",
   "platforms": {
-
+    "ubuntu": ">= 0.0.0",
+    "windows": ">= 0.0.0"
   },
   "dependencies": {
 
